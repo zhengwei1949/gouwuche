@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vuejs-全选-下面这段代码和vuejs官网里面checkbox绑定很像。不明白的可以直接上vuejs官网看看。
+</title>
+<style type="text/css">
+* {
+    padding: 0;
+    margin: 0;
+}
+a {
+    color: #333;
+    text-decoration:none;
+}
+</style>
+</head>
+<body ng-app="myApp">
+    <div ng-controller="myController">
+        <label for="flag">全选
+            <input id="flag" type="checkbox" ng-model="select_all" ng-change="selectAll()">
+        </label>
+        <ul>
+            <li ng-repeat="i in list">
+                <input type="checkbox" ng-model="i.checked" ng-change="selectOne()">
+                <span>{{id}}</span>
+            </li>
+        </ul>
+    </div>
+<script src="https://cdn.bootcss.com/angular.js/1.5.6/angular.js"></script>
+<script>
+var app = angular.module('myApp',[]);
+app.controller('myController', ['$scope', function ($scope) {
+    $scope.list = [
+        {'id': 101},
+        {'id': 102},
+        {'id': 103},
+        {'id': 104},
+        {'id': 105},
+        {'id': 106},
+        {'id': 107}
+    ];
+    $scope.m = [];
+    $scope.checked = [];
+    $scope.selectAll = function () {
+        if($scope.select_all) {
+            $scope.checked = [];
+            angular.forEach($scope.list, function (i) {
+                i.checked = true;
+                $scope.checked.push(i.id);
+            })
+        }else {
+            angular.forEach($scope.list, function (i) {
+                i.checked = false;
+                $scope.checked = [];
+            })
+        }
+        console.log($scope.checked);
+    };
+    $scope.selectOne = function () {
+        angular.forEach($scope.list , function (i) {
+            var index = $scope.checked.indexOf(i.id);
+            if(i.checked && index === -1) {
+                $scope.checked.push(i.id);
+            } else if (!i.checked && index !== -1){
+                $scope.checked.splice(index, 1);
+            };
+        })
+ 
+        if ($scope.list.length === $scope.checked.length) {
+            $scope.select_all = true;
+        } else {
+            $scope.select_all = false;
+        }
+        console.log($scope.checked);
+    }
+}]);
+</script>
+</body>
+</html>
